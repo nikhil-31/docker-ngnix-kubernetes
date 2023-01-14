@@ -2,8 +2,9 @@ node {
     def app
     
     stage("Fix the permission issue") {
-        agent any
-        steps {
+//         agent any
+//         steps {
+        app.inside {
             sh "sudo chown root:jenkins /run/docker.sock"
         }
     }

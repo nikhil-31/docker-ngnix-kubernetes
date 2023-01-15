@@ -5,16 +5,16 @@ pipeline {
     ecrcredentials = "ecr:us-east-1:ecr-ismail"
     dockerImage = ''
   } 
-  agent any
-  
-  stage("Fix the permission issue") {
-    agent any
-    steps {
-        sh "sudo chown root:jenkins /run/docker.sock"
-    }
-  }
-        
+  agent any       
   stages {
+  
+    stage("Fix the permission issue") {
+        agent any
+        steps {
+            sh "sudo chown root:jenkins /run/docker.sock"
+        }
+    }
+  
     stage('Cloning Git') {
       steps {
          checkout scm

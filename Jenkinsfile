@@ -41,22 +41,16 @@ pipeline {
 
         stage('Build') { 
             steps { 
-                script{
-                    app = docker.build("superrepo")
-                }
+                sh 'aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 027664986317.dkr.ecr.us-east-1.amazonaws.com'
+                sh 'docker build -t superrepo .'
             }
         }
         
         stage('Docker Push to ECR') {
             agent any
             steps {
-                script{
-                    docker.withRegistry("https://" + registry, "ecr:eu-central-1:" + registryCredential) {
-                        app.push("${env.BUILD_NUMBER}")
-                        app.push("latest")
-//                         app.push()
-                    }
-                }
+                sh 'docker tag superrepo:latest 027664986317.dkr.ecr.us-east-1.amazonaws.com/superrepo:latest'
+                sh 'docker push 027664986317.dkr.ecr.us-east-1.amazonaws.com/superrepo:latest'
             }
         }
     

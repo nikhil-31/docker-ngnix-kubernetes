@@ -20,14 +20,21 @@ pipeline {
          checkout scm
       }
     }
-    stage('Building image') {
-      steps{
-        script {
-          dockerImage = sudo docker.build imagename
-        }
+    stage('Docker Build') {
+      agent any
+      steps {
+      	sh 'sudo docker build -t nikhilsuper/django-polls:latest .'
       }
     }
-   
+//     stage('Building image') {
+//       steps{
+//         sh "echo building the image"
+//         script {
+//           dockerImage = sudo docker.build imagename
+//         }
+//       }
+//     }
+//    
   stage('Deploy Master Image') {
     when {
       anyOf {

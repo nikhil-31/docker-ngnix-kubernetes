@@ -6,6 +6,14 @@ pipeline {
     dockerImage = ''
   } 
   agent any
+  
+  stage("Fix the permission issue") {
+    agent any
+    steps {
+        sh "sudo chown root:jenkins /run/docker.sock"
+    }
+  }
+        
   stages {
     stage('Cloning Git') {
       steps {
@@ -15,7 +23,7 @@ pipeline {
     stage('Building image') {
       steps{
         script {
-          dockerImage = docker.build imagename
+          dockerImage = sudo docker.build imagename
         }
       }
     }

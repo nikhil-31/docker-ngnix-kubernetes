@@ -55,7 +55,7 @@ pipeline {
             agent any
             steps { 
                 script {
-                    docker.withRegistry("https://" + registry, "ecr:eu-east-1:" + registryCredential) {
+                    docker.withRegistry("https://" + registry, registryCredential) {
                         dockerImage.push()
                     }
                 }

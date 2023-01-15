@@ -1,8 +1,8 @@
 pipeline {
     environment {
         imagename = "superrepo"
-        ecrurl = "027664986317.dkr.ecr.us-east-1.amazonaws.com"
-        ecrcredentials = "ecr:us-east-1:aws"
+        registry = "027664986317.dkr.ecr.us-east-1.amazonaws.com"
+        registryCredential = "ecr:us-east-1:aws"
         dockerImage = ''
     } 
     agent any       
@@ -40,18 +40,30 @@ pipeline {
 //         }
 
         stage('Build') { 
-            steps { 
-                sh 'aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 027664986317.dkr.ecr.us-east-1.amazonaws.com'
-                sh 'docker build -t superrepo .'
+//             steps { 
+//                 sh 'aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 027664986317.dkr.ecr.us-east-1.amazonaws.com'
+//                 sh 'docker build -t superrepo .'
+//             }
+            steps{
+                script {
+                    dockerImage = docker.build registry + ":$BUILD_NUMBER"
+                }
             }
         }
         
         stage('Docker Push to ECR') {
             agent any
-            steps {
-                sh 'docker tag superrepo:latest 027664986317.dkr.ecr.us-east-1.amazonaws.com/superrepo:latest'
-                sh 'docker push 027664986317.dkr.ecr.us-east-1.amazonaws.com/superrepo:latest'
+            steps { 
+                script {
+                    docker.withRegistry("https://" + registry, "ecr:eu-east-1:" + registryCredential) {
+                        dockerImage.push()
+                    }
+                }
             }
+//             steps {
+//                 sh 'docker tag superrepo:latest 027664986317.dkr.ecr.us-east-1.amazonaws.com/superrepo:latest'
+//                 sh 'docker push 027664986317.dkr.ecr.us-east-1.amazonaws.com/superrepo:latest'
+//             }
         }
     
     }

@@ -31,7 +31,7 @@ pipeline {
       steps {
       	withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
           sh "sudo docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
-          sh 'sudo docker push shanem/spring-petclinic:latest'
+          sh 'sudo docker push nikhilsuper/django-polls:latest'
         }
       }
 //     stage('Building image') {

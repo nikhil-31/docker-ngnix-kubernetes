@@ -1,7 +1,7 @@
 pipeline {
     environment {
         imagename = "superrepo"
-        registry = "027664986317.dkr.ecr.us-east-1.amazonaws.com"
+        registry = "027664986317.dkr.ecr.us-east-1.amazonaws.com/superrepo"
         registryCredential = "ecr:us-east-1:aws"
         dockerImage = ''
     } 

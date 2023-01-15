@@ -1,36 +1,52 @@
-node {
-    def app
+pipeline {
+  environment {
+    imagename = "django-polls"
+    ecrurl = "027664986317.dkr.ecr.us-east-1.amazonaws.com"
+    ecrcredentials = "ecr:us-east-1:ecr-ismail"
+    dockerImage = ''
+  } 
+  agent any
+  stages {
+    stage('Cloning Git') {
+      steps {
+         checkout scm
+      }
+    }
+    stage('Building image') {
+      steps{
+        script {
+          dockerImage = docker.build imagename
+        }
+      }
+    }
+   
+  stage('Deploy Master Image') {
+    when {
+      anyOf {
+            branch 'master'
+      }
+     }
+      steps{
+        script {
+          docker.withRegistry(ecrurl, ecrcredentials) {     
+            dockerImage.push("$BUILD_NUMBER")
+             dockerImage.push('latest')
+
+          }
+        }
+      }
+    }
     
-    stage("Fix the permission issue") {
-//         agent any
-//         steps {
-        app.inside {
-            sh "sudo chown root:jenkins /run/docker.sock"
-        }
-    }
-
-    stage('Clone repository') {
-        checkout scm
-    }
-
-    stage('Build image') {
-        app = docker.build("nikhilsuper/django-polls")
-    }
-
-    stage('Test image') {
-        app.inside {
-            sh 'echo "Tests passed"'
-        }
-    }
-
-    stage('Push image') {
-        docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
-            app.push("${env.BUILD_NUMBER}")
-        }
-    }
-    
-    stage('Trigger ManifestUpdate') {
-        echo "triggering updatemanifestjob"
-        build job: 'update-manifest', parameters: [string(name: 'DOCKERTAG', value: env.BUILD_NUMBER)]
-    }
-}
+    stage('Remove Unused docker image - Master') {
+      when {
+      anyOf {
+            branch 'master'
+      }
+     }
+      steps{
+        sh "docker rmi $imagename:$BUILD_NUMBER"
+        sh "docker rmi $imagename:latest"
+      }
+    } // End of remove unused docker image for master
+  }  
+} //end of pipeline

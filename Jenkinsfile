@@ -21,29 +21,21 @@ pipeline {
             }
         }
         
-//         stage('Docker Build') {
-//             agent any
-//             steps {
-//                 sh 'docker build -t superrepo .'
-//             }
-//         }
-//         
-//         stage('Docker Push to DockerHub') {
-//             agent any
-//             steps {
-//                 withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'dockerHubPassword', 
-//                                 usernameVariable: 'dockerHubUser')]) {
-// 
-//                     sh "sudo docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
-//                     sh 'sudo docker push nikhilsuper/django-polls:latest'
-//             }
-//         }
+        stage('lint'){
+            steps {
+                sh "virtualenv --python=/usr/bin/python venv"
+                sh "export TERM='linux'"  
+                sh 'pylint --rcfile=pylint.cfg funniest/ $(find . -maxdepth 1 -name "*.py" -print) --msg-template="{path}:{line}: [{msg_id}({symbol}), {obj}] {msg}" > pylint.log || echo "pylint exited with $?"'
+                sh "rm -r venv/"
+               
+                echo "linting Success, Generating Report"
+                 
+                warnings canComputeNew: false, canResolveRelativePaths: false, defaultEncoding: '', excludePattern: '', healthy: '', includePattern: '', messagesPattern: '', parserConfigurations: [[parserName: 'PyLint', pattern: '*']], unHealthy: ''
+               
+            }   
+        }
 
         stage('Build') { 
-//             steps { 
-//                 sh 'aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 027664986317.dkr.ecr.us-east-1.amazonaws.com'
-//                 sh 'docker build -t superrepo .'
-//             }
             steps{
                 script {
                     dockerImage = docker.build registry + ":$BUILD_NUMBER"
@@ -60,13 +52,7 @@ pipeline {
                     }
                 }
             }
-//             steps {
-//                 sh 'docker tag superrepo:latest 027664986317.dkr.ecr.us-east-1.amazonaws.com/superrepo:latest'
-//                 sh 'docker push 027664986317.dkr.ecr.us-east-1.amazonaws.com/superrepo:latest'
-//             }
         }
-    
     }
-    
       
 } 

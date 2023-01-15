@@ -70,6 +70,6 @@ pipeline {
 //         sh "docker rmi $imagename:$BUILD_NUMBER"
 //         sh "docker rmi $imagename:latest"
 //       }
-//     } // End of remove unused docker image for master
+    } // End of remove unused docker image for master
   }  
 } //end of pipeline

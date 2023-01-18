@@ -27,30 +27,47 @@ pipeline {
 //             }   
 //         }
 
-        stage('Build') { 
-            steps{
-                script {
-                    dockerImage = docker.build registry + ":$BUILD_NUMBER"
-                }
-            }
-        }
-        
-        stage('Docker Push to ECR') {
+//         stage('Build') { 
+//             steps{
+//                 script {
+//                     dockerImage = docker.build registry + ":$BUILD_NUMBER"
+//                 }
+//             }
+//         }
+//         
+//         stage('Docker Push to ECR') {
+//             agent any
+//             steps { 
+//                 script {
+//                     docker.withRegistry("https://" + registry, registryCredential) {
+//                         dockerImage.push()
+//                     }
+//                 }
+//             }
+//         }
+
+        stage('Docker Build') {
             agent any
-            steps { 
-                script {
-                    docker.withRegistry("https://" + registry, registryCredential) {
-                        dockerImage.push()
-                    }
-                }
+            steps {
+      	        sh 'docker build -t nikhilsuper/django-polls:latest .'
             }
         }
+    
+        stage('Docker Push') {
+    	    agent any
+            steps {
+      	        withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'dockerHubPassword', 
+      	                        usernameVariable: 'dockerHubUser')]) {
+                    sh "sudo docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
+                    sh "sudo docker push nikhilsuper/django-polls:${BUILD_NUMBER}"
+            }
+        }         
         
-        stage('Update manifest: Invoke pipeline') {
+        stage('Update manifest: Invoke updatemanifest') {
             agent any
             steps {
                 build job: 'updatemanifest', parameters: [
-                    string(name: 'DOCKERTAG', value: "$BUILD_NUMBER")
+                    string(name: 'DOCKERTAG', value: "${BUILD_NUMBER}")
                 ]  
             }
         }

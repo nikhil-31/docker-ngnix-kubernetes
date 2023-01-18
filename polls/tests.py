@@ -1,3 +1,6 @@
+"""
+Question model tests
+"""
 import datetime
 
 from django.test import TestCase
@@ -8,6 +11,9 @@ from .models import Question
 
 
 class QuestionModelTests(TestCase):
+    """
+    Question model tests
+    """
 
     def test_was_published_recently_with_future_question(self):
         """
@@ -17,7 +23,6 @@ class QuestionModelTests(TestCase):
         time = timezone.now() + datetime.timedelta(days=30)
         future_question = Question(pub_date=time)
         self.assertIs(future_question.was_published_recently(), False)
-
 
     def test_was_published_recently_with_old_question(self):
         """
@@ -49,6 +54,9 @@ def create_question(question_text, days):
 
 
 class QuestionIndexViewTests(TestCase):
+    """
+    Question view tests
+    """
     def test_no_questions(self):
         """
         If no questions exist, an appropriate message is displayed.
@@ -107,6 +115,9 @@ class QuestionIndexViewTests(TestCase):
 
 
 class QuestionDetailViewTests(TestCase):
+    """
+    Question view tests
+    """
     def test_future_question(self):
         """
         The detail view of a question with a pub_date in the future

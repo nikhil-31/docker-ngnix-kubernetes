@@ -103,7 +103,8 @@ AUTH_PASSWORD_VALIDATORS = [
         '.UserAttributeSimilarityValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME': 'django.contrib.auth.password_validation.' +
+        'MinimumLengthValidator',
     },
     {
         'NAME': 'django.contrib.auth.password_validation.' +
@@ -163,7 +164,8 @@ logging.config.dictConfig({
     'formatters': {
         'console': {
             'format': '%(asctime)s %(levelname)s ' +
-            '[%(name)s:%(lineno)s] %(module)s %(process)d %(thread)d %(message)s',
+            '[%(name)s:%(lineno)s] %(module)s ' +
+            '%(process)d %(thread)d %(message)s',
         },
     },
     'handlers': {

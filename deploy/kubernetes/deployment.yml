@@ -15,7 +15,7 @@ spec:
         app: polls
     spec:
       containers:
-        - image: nikhilsuper/polls:latest
+        - image: nikhilsuper/django-polls:latest
           name: polls
           envFrom:
           - secretRef:

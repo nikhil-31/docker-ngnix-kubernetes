@@ -21,11 +21,11 @@ pipeline {
             }
         }
         
-        stage('lint'){
-            steps {
-                sh 'docker run -i --rm -e GIT_SRC="$GIT_URL" -e GIT_NAME="$GIT_NAME" -e GIT_BRANCH="$BRANCH_NAME" -e GIT_CHANGE_ID="$CHANGE_ID" eeacms/pylint'
-            }   
-        }
+//         stage('lint'){
+//             steps {
+//                 sh 'docker run -i --rm -e GIT_SRC="$GIT_URL" -e GIT_NAME="$GIT_NAME" -e GIT_BRANCH="$BRANCH_NAME" -e GIT_CHANGE_ID="$CHANGE_ID" eeacms/pylint'
+//             }   
+//         }
 
         stage('Build') { 
             steps{
@@ -43,6 +43,15 @@ pipeline {
                         dockerImage.push()
                     }
                 }
+            }
+        }
+        
+        stage('Update manifest: Invoke pipeline') {
+            agent any
+            steps {
+                build job: 'pipeline1', parameters: [
+                    string(name: 'DOCKERTAG', value: "$BUILD_NUMBER")
+                ]  
             }
         }
     }

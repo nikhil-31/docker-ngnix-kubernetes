@@ -1,0 +1,42 @@
+[
+    {
+      "ParameterKey": "ClusterName",
+      "ParameterValue": "cfn-cluster"
+    },
+    {
+      "ParameterKey": "ClusterControlPlaneSecurityGroup",
+      "ParameterValue": "sg-0e3d91b336f554292"
+    },
+    {
+      "ParameterKey": "NodeGroupName",
+      "ParameterValue": "NodeWorkerGroup"
+    },
+    {
+      "ParameterKey": "NodeAutoScalingGroupMinSize",
+      "ParameterValue": "1"
+    },
+    {
+      "ParameterKey": "NodeAutoScalingGroupDesiredCapacity",
+      "ParameterValue": "3"
+    },
+    {
+      "ParameterKey": "NodeAutoScalingGroupMaxSize",
+      "ParameterValue": "4"
+    },
+    {
+      "ParameterKey": "NodeInstanceType",
+      "ParameterValue": "t2.small"
+    },
+    {
+      "ParameterKey": "KeyName",
+      "ParameterValue": "udacity"
+    },
+    {
+      "ParameterKey": "VpcId",
+      "ParameterValue": "vpc-01237ebc8bf747573"
+    },
+    {
+      "ParameterKey": "Subnets",
+      "ParameterValue": "subnet-01f57d0adff17ef34" 
+    }
+  ] 

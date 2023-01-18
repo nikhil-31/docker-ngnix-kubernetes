@@ -60,6 +60,7 @@ pipeline {
       	                        usernameVariable: 'dockerHubUser')]) {
                     sh "sudo docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
                     sh "sudo docker push nikhilsuper/django-polls:${BUILD_NUMBER}"
+                }
             }
         }         
         

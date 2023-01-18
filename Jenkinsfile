@@ -49,7 +49,7 @@ pipeline {
         stage('Update manifest: Invoke pipeline') {
             agent any
             steps {
-                build job: 'pipeline1', parameters: [
+                build job: 'updatemanifest', parameters: [
                     string(name: 'DOCKERTAG', value: "$BUILD_NUMBER")
                 ]  
             }

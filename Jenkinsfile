@@ -46,7 +46,7 @@ pipeline {
                     string(name: 'DOCKERTAG', value: "${BUILD_NUMBER}")
                 ]  
             }
-        }
+        } 
     }
       
 } 

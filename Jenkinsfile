@@ -49,7 +49,7 @@ pipeline {
         stage('Docker Build') {
             agent any
             steps {
-      	        sh 'docker build -t nikhilsuper/django-polls:latest .'
+      	        sh "docker build -t nikhilsuper/django-polls:${BUILD_NUMBER} ."
             }
         }
     

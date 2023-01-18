@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+"""
+This is django management
+"""
 import os
 import sys
 

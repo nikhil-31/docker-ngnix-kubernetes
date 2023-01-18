@@ -15,11 +15,11 @@ pipeline {
             }
         }
         
-//         stage('lint'){
-//             steps {
-//                 sh 'docker run -i --rm -e GIT_SRC="$GIT_URL" -e GIT_NAME="$GIT_NAME" -e GIT_BRANCH="$BRANCH_NAME" -e GIT_CHANGE_ID="$CHANGE_ID" eeacms/pylint'
-//             }   
-//         }
+        stage('lint'){
+            steps {
+                sh 'docker run -i --rm -e GIT_SRC="$GIT_URL" -e GIT_NAME="$GIT_NAME" -e GIT_BRANCH="$BRANCH_NAME" -e GIT_CHANGE_ID="$CHANGE_ID" eeacms/pylint'
+            }   
+        }
 
         stage('Docker Build') {
             agent any
